@@ -1,25 +1,27 @@
 # SparkleStation  
 ### Personal HSR Data Hub
 
-**Status: 1.0**
+**Version: 1.0.1**
 
-SparkleStation is a **Laravel-based web project** built as a personal hub for **HSR** data with a focus on data presentation, UI experimentation and small interactive systems.
+SparkleStation is a **Laravel-based personal hub** for exploring and managing **Honkai: Star Rail** data. It focuses on data presentation, UI experimentation and interactive systems.
 
-This project was created as a **learning exercise and portfolio project**.
+The project was created as a learning exercise and portfolio piece.
 
 ---
 
 ## Overview
 
 This application provides:
-- Structured access to **characters, lightcones, patches, relics, and game metadata**
-- Multiple **view modes** with sorting and filtering options
-- A mix of **MPA and SPA approaches**, depending on feature requirements
-- A relic rolling simulator to mimic the endless pursuit of a perfect piece.
+- Structured access to **characters, Light Cones, patches, relics, and other game data**
+- Multiple view modes with sorting and filtering options
+- A gacha system for simulating character and Light Cone pulls
+- A relic system for generating, leveling, and managing relics
+- A character management system for equipping Light Cones and relics
+- A mix of **MPA and SPA approaches**, depending on each feature’s requirements
 
 The project serves both as a **personal exploration space** and a **technical showcase**.
 
-To keep the repository size manageable, the full library of game assets (~550MB of images) and the production database are not included in this repo.
+To keep the repository size manageable, the full library of game assets (~550 MB of images) and the production database are not included in this repo.
 
 ---
 
@@ -85,9 +87,15 @@ In timeline mode:
 
 https://github.com/user-attachments/assets/20a27313-135d-421d-8093-8cd185db077c
 
-This entire section is a **Vanilla JS SPA**. I wanted to challenge myself to build a reactive, state-driven UI without the "safety net" of a framework, focusing on DOM manipulation and clean event handling.
+The Relics section is built as a **Vanilla JavaScript SPA**. I created it without a frontend framework to practice manual state management, DOM updates and event handling.
 
 ---
+
+## Gacha System
+
+https://github.com/user-attachments/assets/381d7c83-78ee-4fbe-80d0-65e543f9d216
+
+The gacha system simulates character and Light Cone banners. Obtained items are added to the user's account and can later be managed through the User Panel.
 
 ## User Panel
 
@@ -113,7 +121,7 @@ Users can:
 - Inspect calculated stats
 - View and activate eidolons
 
-Vue was chosen due to higher UI complexity and shared reactive state.
+I used Vue for the User Panel because its interconnected inventory and character-management features required more complex reactive state.
 
 ---
 
@@ -124,8 +132,6 @@ Vue was chosen due to higher UI complexity and shared reactive state.
 - Learn when to use Vanilla JavaScript vs Vue.js
 - Improve handling of client-side state and AJAX interactions
 - Keep the codebase understandable and easy to extend
-
-This project serves as a controlled technical playground for experimenting with different approaches while maintaining a maintainable and understandable codebase.
 
 ---
 
@@ -140,4 +146,4 @@ This repository is intended as a **code showcase** rather than a plug-and-play a
 **SparkleStation** is a fan-made project and is not affiliated with or endorsed by **HoYoverse**.
 
 - **Assets:** All game assets, including images, icons, and character data, are the property of **© HoYoverse (Cognosphere)**.
-- **Project Purpose:** This is a non-commercial, open-source project created for educational and portfolio purposes. No copyright infringement is intended.
+- **Project Purpose:** This is a non-commercial project created for educational and portfolio purposes. No copyright infringement is intended.
