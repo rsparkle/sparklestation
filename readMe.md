@@ -91,15 +91,27 @@ This entire section is a **Vanilla JS SPA**. I wanted to challenge myself to bui
 
 ## User Panel
 
-https://github.com/user-attachments/assets/f6d38114-072b-4f29-bd8f-f4f683967ed7
-
 The user panel is the **only Vue-powered section** of the application.
+
+### Inventory and Settings
+
+https://github.com/user-attachments/assets/f6d38114-072b-4f29-bd8f-f4f683967ed7
 
 Features:
 - User settings
 - Personal relic inventory
 - Relic generation and leveling system
-- Character management page (in progress)
+
+### Character Management
+
+https://github.com/user-attachments/assets/83bc4b9d-bc53-4cd8-b596-ea6b6f05ce83
+
+Users can:
+- Manage their characters obtained from the gacha system
+- Equip and enhance Light Cones
+- Assign relics
+- Inspect calculated stats
+- View and activate eidolons
 
 Vue was chosen due to higher UI complexity and shared reactive state.
 
@@ -114,19 +126,6 @@ Vue was chosen due to higher UI complexity and shared reactive state.
 - Keep the codebase understandable and easy to extend
 
 This project serves as a controlled technical playground for experimenting with different approaches while maintaining a maintainable and understandable codebase.
-
----
-
-## Roadmap
-
-### v0.9
-- Character rolling system
-- Expanded user character management
-- Additional UI improvements
-
-### v1.0
-- Final documentation cleanup
-- Stable portfolio release
 
 ---
 
