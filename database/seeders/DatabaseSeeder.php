@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             UpdateCharacterMaterialGroupsSeeder::class,
             StandardPoolSeeder::class,
             UserPitySeeder::class,
+            UserItemLevelSeeder::class,
+            EidolonNumberSeeder::class
         ]);
     }
 }

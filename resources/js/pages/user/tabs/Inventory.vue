@@ -42,7 +42,7 @@
           @scroll="handleScroll">
           <div :style="{ height: Math.max(totalHeight, containerHeight) + 'px', position: 'relative' }">
             <div v-for="(item, index) in visibleItems" :key="item.id" :style="getItemStyle(index)"
-              @click="setActiveItem(item)" :class="{ active: activeItem === item }"
+              @click="setActiveItem(item)"
               class="border-2 border-red-900 bg-gradient-to-br from-red-950/60 to-red-900/40 absolute group cursor-pointer transition-all duration-200 hover:border-red-600 hover:shadow-lg hover:shadow-red-900/50 hover:-translate-y-1">
               <img v-if="item.piece?.img" :src="item.piece.img" :alt="item.piece?.name"
                 class="w-full h-full object-cover">
@@ -201,7 +201,7 @@
       </div>
     </div>
 
-    <LoadingModal :isOpen="showLoadingModal" @close="showLoadingModal = false" />
+    <LoadingModal :isOpen="showLoadingModal" title="relics" @close="showLoadingModal = false" />
     <GenerateRelicsModal :isOpen="showGenerateModal" @close="showGenerateModal = false"
       :generatedRelics="generatedRelics" />
     <SetSelectionModal :isOpen="showRelicModal" @close="showRelicModal = false" :setList="setList.relics"
@@ -216,7 +216,6 @@ import LoadingModal from '../components/LoadingModal.vue';
 import SetSelectionModal from './Inventory/SetSelectionModal.vue';
 import GenerateRelicsModal from './Inventory/GenerateRelicsModal.vue';
 import FilterPanel from './Inventory/FilterPanel.vue';
-import { addPendingChange } from '@/utils';
 import { enhanceRandomModifier, formatStat, statPerLevel, typeKeyMap } from '../relicData.js';
 
 export default {
@@ -348,13 +347,6 @@ export default {
         absoluteIndex: this.visibleStart + i
       }));
     },
-    formattedMainStat() {
-      if (!this.activeItem || !this.activeItem.mainStat) return null;
-      return {
-        ...this.activeItem.mainStat,
-        formattedValue: formatStat(this.activeItem.mainStat)
-      };
-    },
     visibleFormattedSubStats() {
       if (!this.activeItem || !this.activeItem.subStats) return [];
       return this.activeItem.subStats
@@ -383,7 +375,7 @@ export default {
       }, {})
     }
   },
-  async mounted() {
+  mounted() {
     this.$nextTick(this.updateContainerHeight);
 
     this.showLoadingModal = true;
@@ -417,7 +409,6 @@ export default {
       const availablePx = Math.max(100, Math.floor(window.innerHeight - rect.top));
 
       el.style.maxHeight = availablePx + 'px';
-      el.style.overflowY = 'auto';
 
       this.containerHeight = el.clientHeight || 0;
       this.handleScroll({ target: el });
@@ -429,7 +420,7 @@ export default {
       const startRow = Math.floor(scrollTop / rowHeight);
 
       this.visibleStart = Math.max(0, (startRow - 1) * this.itemsPerRow);
-      this.visibleEnd = Math.min(this.inventory.length, (startRow + visibleRows + 2) * this.itemsPerRow);
+      this.visibleEnd = Math.min(this.inventoryFiltered.length, (startRow + visibleRows + 2) * this.itemsPerRow);
     },
     getItemStyle(index) {
       const item = this.visibleItems[index];
@@ -512,14 +503,13 @@ export default {
       this.canLevelUp = false;
       this.isAnimating = true;
 
-      let nextLevel = this.activeItem.level;
-      let amountlevelUps = 1
+      let amountLevelUps = 1
       // Check how many level-ups
       if (this.nextNodeLevel) {
-        amountlevelUps = this.toNextMultiplierOf3(nextLevel);
+        amountLevelUps = this.toNextMultiplierOf3(this.activeItem.level);
       }
 
-      await this.animateLevelUpBar(amountlevelUps);
+      await this.animateLevelUpBar(amountLevelUps);
       this.isAnimating = false;
     },
     animateLevelUpBar(amount) {
@@ -544,7 +534,7 @@ export default {
               clearInterval(interval);
               completedLevels++;
 
-              setTimeout(() => {
+              setTimeout(async () => {
                 bar.style.transition = 'none';
                 bar.style.width = '0%';
                 void bar.offsetWidth;
@@ -557,14 +547,13 @@ export default {
 
                   // Save all level changes and stat changes in one go
                   const relic = this.inventory.find(r => r.id === relicId);
+
                   if (relic) {
-                    let pending = {
-                      table: 'user_relics',
-                      id: relic.id,
-                      type: 'MODIFY',
-                      columns: { level: relic.level }
-                    };
-                    addPendingChange('pendingChanges', pending);
+                    try {
+                      await this.saveRelic(relic);
+                    } catch (error) {
+                      newNotification('error', 'Failed to save relic changes.');
+                    }
                   }
 
                   if (this.activeItem.level < 15) this.canLevelUp = true;
@@ -589,14 +578,6 @@ export default {
           relic.mainStat.value += statPerLevel[relic.mainStat.stat_type];
 
           this.activeItem = relic;
-
-          let pending = {
-            table: 'user_relic_stats',
-            id: relic.mainStat.id,
-            type: 'MODIFY',
-            columns: { value: relic.mainStat.value }
-          };
-          addPendingChange('pendingChanges', pending);
         }
         setTimeout(() => {
           this.isLevelingUp = false;
@@ -611,44 +592,58 @@ export default {
       let substat = relic.subStats.find(s => s.isHidden);
       if (substat) {
         substat.isHidden = false;
-        let pending = {
-          table: 'user_relic_stats',
-          id: substat.id,
-          type: 'MODIFY',
-          columns: { is_hidden: false }
-        }
-        // Save updated array which will be automatically sent to the database periodically
-        addPendingChange('pendingChanges', pending)
       } else {
-        const statModifierData = enhanceRandomModifier(this.activeItem);
-        let pending = {
-          table: 'user_relic_stats',
-          id: statModifierData.id,
-          type: 'MODIFY',
-          columns: { value: statModifierData.value, rolls: statModifierData.rolls }
-        }
-        // Save updated array which will be automatically sent to the database periodically
-        addPendingChange('pendingChanges', pending);
+        enhanceRandomModifier(relic);
       }
 
       this.activeItem = relic;
     },
-    toggleState(state) {
+    async toggleState(state) {
       const relic = this.inventory.find(r => r.id === this.activeItem.id);
       if (!relic) return;
 
-      relic.status = relic.status === state ? null : state;
+      relic.status = relic.status === state ? 'none' : state;
       this.activeItem = relic;
 
-      let pending = {
-        table: 'user_relics',
-        id: relic.id,
-        type: 'MODIFY',
-        columns: { status: relic.status }
+      try {
+        await this.saveRelic(relic);
+      } catch {
+        newNotification('error', 'Failed to update relic status.');
       }
-      // Save updated array which will be automatically sent to the database periodically
-      addPendingChange('pendingChanges', pending);
-    }
+    },
+    async saveRelic(relic) {
+      const response = await fetch(`/api/inventory/relics/${relic.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document
+            .querySelector('meta[name="csrf-token"]')
+            .content
+        },
+        body: JSON.stringify({
+          level: relic.level,
+          status: relic.status,
+          stats: [
+            {
+              id: relic.mainStat.id,
+              value: relic.mainStat.value
+            },
+            ...relic.subStats.map(stat => ({
+              id: stat.id,
+              value: stat.value,
+              rolls: stat.rolls,
+              is_hidden: stat.isHidden
+            }))
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save relic');
+      }
+
+      return response.json();
+    },
   }
 }
 </script>

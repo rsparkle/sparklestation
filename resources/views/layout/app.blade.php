@@ -37,7 +37,7 @@
         </nav>
 
         {{-- Main Content --}}
-        <div id="content" class="flex-grow ml-[16.666667%] lg:mr-[14.2%] max-w-full">
+        <div id="content" class="flex-1 min-w-0 ml-[16.666667%] lg:mr-[14.2%]">
             {{-- Top Sidebar for Smaller Screens --}}
             <div
                 class="fixed top-0 left-5 right-0 flex lg:hidden bg-crimson z-50 px-4 pl-[16.666667%] justify-between items-center box-border">

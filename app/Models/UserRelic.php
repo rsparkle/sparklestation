@@ -21,7 +21,7 @@ class UserRelic extends Model
         'obtained_at'
     ];
 
-    protected $appends = ['piece', 'mainStat', 'subStats', 'level'];
+    protected $appends = ['piece', 'mainStat', 'subStats', 'img', 'level'];
 
     public function user(): BelongsTo
     {
@@ -84,8 +84,6 @@ class UserRelic extends Model
 
     public function getImgAttribute()
     {
-        $piece = $this->piece();
-
-        return $piece ? $piece->img : null;
+        return $this->piece?->img;
     }
 }

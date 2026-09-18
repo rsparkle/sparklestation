@@ -16,7 +16,7 @@
                 <!-- Image Section -->
                 <div class="flex flex-col items-center justify-center mr-4 space-y-2 flex-shrink-0">
                     <div class="bg-gradient-to-br from-red-700 to-red-900 rounded-full p-3 shadow-lg">
-                        <img src="{{ asset('images/eidolons/' . $character->slug . '-' . str_pad($index + 1, 2, '0', STR_PAD_LEFT) . '-art.webp') }}"
+                        <img src="{{ $eidolon->img }}"
                             alt="{{ $character->name . ' Eidolon ' . ($index + 1) }}"
                             class="w-16 h-16 object-contain hover:scale-105 cursor-pointer"
                             onclick="openImageModal(this.src)">

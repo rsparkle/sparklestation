@@ -143,7 +143,7 @@ class GachaService
         if ($record->exists) {
             $record->increment('copies_available');
         } else {
-            $record->copies_available = 1;
+            $record->copies_available = 0;
             $record->save();
         }
     }

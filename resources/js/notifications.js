@@ -29,7 +29,7 @@ export function setupNotifications(autoHideMs = 5000, staggerMs = 100) {
 
 /**
  * Shows a new notification and auto-removes it
- * @param {string} type - Notification type ('success' or 'error')
+ * @param {string} type - Notification type ('success', 'error' or 'loading')
  * @param {string} message - Text to display in the notification
  * @param {number} [autoHideMs=5000] - Time in ms before it auto-hides
  */

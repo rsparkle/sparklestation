@@ -1,15 +1,12 @@
 <?php
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\SyncController;
 use App\Http\Controllers\Api\PatchController;
 use App\Http\Controllers\Api\RelicController;
 use App\Http\Controllers\Api\RelicInventoryController;
+use App\Http\Controllers\Api\UserItemsController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\GachaController;
-
-// Database changes
-Route::post('/sync', [SyncController::class, 'store']);
 
 // Patches
 Route::get('/patches/{patch}', [PatchController::class, 'show']);
@@ -35,8 +32,47 @@ Route::post('/user/featured', [UserController::class, 'updateFeaturedItem'])->na
 Route::post('/email/verification', [UserController::class, 'sendVerificationEmail'])->name('email-verification')->middleware('web');
 
 // User Inventory
-Route::get('/inventory', [RelicInventoryController::class, 'index'])->name('inventory.index')->middleware('web');
-Route::post('/relics/generate', [RelicInventoryController::class, 'generateRelics'])->name('relics.generate')->middleware('web');
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('/inventory', [
+        RelicInventoryController::class,
+        'index'
+    ])->name('inventory.index');
+
+    Route::post('/relics/generate', [
+        RelicInventoryController::class,
+        'generateRelics'
+    ])->name('relics.generate');
+
+    Route::get('/items', [
+        UserItemsController::class,
+        'index'
+    ])->name('items.index');
+
+    Route::patch('/inventory/relics/{userRelic}', [
+        RelicInventoryController::class,
+        'update'
+    ])->name('inventory.relics.update');
+
+    Route::patch('/inventory/characters/lightcone', [
+        UserItemsController::class,
+        'equipLightcone'
+    ])->name('inventory.lightcone.equip');
+
+    Route::patch('/inventory/characters/lightcone/superimpose', [
+        UserItemsController::class,
+        'superimposeLightcone'
+    ])->name('inventory.lightcone.superimpose');
+
+    Route::patch('/inventory/characters/relics', [
+        UserItemsController::class,
+        'saveRelics'
+    ])->name('inventory.relics.save');
+
+    Route::patch('/inventory/characters/eidolon', [
+        UserItemsController::class,
+        'activateEidolon'
+    ])->name('inventory.eidolon.activate');
+});
 
 // Gacha
 Route::post('/gacha/pull', [GachaController::class, 'submitPull'])->name('gacha.submitPull')->middleware('web');

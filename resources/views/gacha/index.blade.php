@@ -24,15 +24,15 @@
 
                 {{-- Background --}}
                 <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" id="characterBackground"
-                    style="background-image: url({{ $featuredCharacter->getSplashImgAttribute() }})">
+                    style="background-image: url({{ $featuredCharacter->splash_img }})">
                 </div>
 
                 {{-- Carousel --}}
                 <div class="carousel-track" id="characterCarousel">
                     @foreach ($limitedChars as $char)
                         <div class="carousel-slide" data-id="{{ $char->id }}"
-                            data-bg="{{ $char->getSplashImgAttribute() }}">
-                            <img src="{{ $char->getSplashImgAttribute() }}" alt="{{ $char->name }}">
+                            data-bg="{{ $char->splash_img }}">
+                            <img src="{{ $char->splash_img }}" alt="{{ $char->name }}">
                         </div>
                     @endforeach
                 </div>
@@ -68,7 +68,7 @@
 
                 {{-- Background --}}
                 <div class="absolute inset-0 flex items-center justify-center lightcone-bg">
-                    <img src="{{ $featuredLightcone->getArtworkImgAttribute() }}" alt="{{ $featuredLightcone->name }}"
+                    <img src="{{ $featuredLightcone->artwork_img }}" alt="{{ $featuredLightcone->name }}"
                         id="lightconeBackground">
                 </div>
 
@@ -76,8 +76,8 @@
                 <div class="carousel-track" id="lightconeCarousel">
                     @foreach ($limitedLcs as $lc)
                         <div class="carousel-slide" data-id="{{ $lc->id }}"
-                            data-img="{{ $lc->getArtworkImgAttribute() }}">
-                            <img src="{{ $lc->getArtworkImgAttribute() }}" alt="{{ $lc->name }}">
+                            data-img="{{ $lc->artwork_img }}">
+                            <img src="{{ $lc->artwork_img }}" alt="{{ $lc->name }}">
                         </div>
                     @endforeach
                 </div>

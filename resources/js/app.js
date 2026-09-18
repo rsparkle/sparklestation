@@ -2,30 +2,6 @@ import './bootstrap';
 
 // Global functions
 import { setupNotifications, newNotification, closeNotification } from './notifications';
-import { clearPendingChanges, loadPendingChanges } from './utils';
-
-function autoSync(key, apiUrl) {
-    setInterval(() => {
-        const pending = loadPendingChanges(key);
-        if (pending && pending.length > 0) {
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(pending)
-            })
-            .then(res => res.json())
-            .then(() => {
-                clearPendingChanges(key);
-                console.log('Pending changes synced successfully');
-            })
-            .catch(() => {
-                console.warn('Failed to sync pending changes. Will retry');
-            })
-        }
-    }, 5000)
-}
 
 window.closeNotification = closeNotification;
 window.setupNotifications = setupNotifications;
@@ -79,7 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const urlParams = new URLSearchParams(window.location.search);
 
-        autoSync('pendingChanges', '/api/sync');
         // Call setupNotifications to initialize notifications
         setupNotifications();
 

@@ -11,6 +11,8 @@ use App\Models\RelicPiece;
 use App\Models\PlanarOrnamentPiece;
 use App\Models\RelicStat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class RelicInventoryController extends Controller
 {
@@ -163,5 +165,43 @@ class RelicInventoryController extends Controller
             'success' => true,
             'relics' => $generatedItems,
         ]);
+    }
+
+    public function update(Request $request, UserRelic $userRelic)
+    {
+        abort_unless($userRelic->user_id === $request->user()->id, 403);
+
+        $data = $request->validate([
+            'level' => ['sometimes', 'integer', 'between:0,15'],
+            'status' => [
+                'sometimes',
+                Rule::in(['none', 'locked', 'discarded']),
+            ],
+            'stats' => ['sometimes', 'array'],
+            'stats.*.id' => ['required', 'integer'],
+            'stats.*.value' => ['sometimes', 'numeric'],
+            'stats.*.rolls' => ['sometimes', 'integer', 'min:0'],
+            'stats.*.is_hidden' => ['sometimes', 'boolean'],
+        ]);
+
+        DB::transaction(function () use ($userRelic, $data) {
+            $userRelic->update(
+                collect($data)->only(['level', 'status'])->all()
+            );
+
+            foreach ($data['stats'] ?? [] as $statData) {
+                $stat = $userRelic->stats()
+                    ->whereKey($statData['id'])
+                    ->firstOrFail();
+
+                $stat->update(
+                    collect($statData)
+                        ->only(['value', 'rolls', 'is_hidden'])
+                        ->all()
+                );
+            }
+        });
+
+        return response()->json(['success' => true]);
     }
 }

@@ -1,7 +1,7 @@
 <template>
   <div v-if="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-red-800 border-4 border-black p-8 rounded-lg max-w-md w-full mx-4">
-      <p class="text-xl font-bold text-white mb-4">Loading Relics...</p>
+    <div class="bg-red-800 p-8 rounded-lg max-w-md w-full mx-4">
+      <p class="text-xl font-bold text-white mb-4">Loading {{ title }}...</p>
 
       <div class="relative w-full">
         <!-- Progress bar -->
@@ -24,12 +24,12 @@
 
 <script>
 export default {
-  props: { isOpen: Boolean },
+  props: { isOpen: Boolean, title: String},
   data() {
     return {
       internalProgress: 0,
       progressInterval: null,
-      randomSparkle: ''
+      randomSparkle: '',
     }
   },
   watch: {

@@ -15,6 +15,7 @@ class UserRelicStat extends Model
         'user_relic_id',
         'stat_id',
         'value',
+        'rolls',
         'is_main',
         'line_order',
         'is_hidden'

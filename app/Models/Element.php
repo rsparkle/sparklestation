@@ -9,6 +9,8 @@ class Element extends Model
 {
     use HasFactory;
 
+    protected $appends = ['img'];
+
     public function getImgAttribute()
     {
         return asset(("images/elements/$this->name.webp"));

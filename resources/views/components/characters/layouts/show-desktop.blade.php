@@ -8,7 +8,7 @@
         <div class="absolute transition-opacity duration-500 ease-out opacity-100 inset-0 bg-cover bg-center bg-no-repeat panel-hidden panel-base"
             style="background-image: url({{ $character->splash_bg_img }})" id="characterSplashBackground">
         </div>
-        <!-- Overlay gradient for better text visibility -->
+        <!-- Overlay gradient -->
         <div class="absolute inset-0 bg-gradient-to-r from-crimson/30 to-transparent"></div>
 
         <div class="character-main-container flex w-full main-container-general p-5 relative z-10">

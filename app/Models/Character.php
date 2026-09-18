@@ -29,7 +29,7 @@ class Character extends Model
 
     public $timestamps = false;
 
-    protected $appends = ['path_img', 'element_img', 'icon_img'];
+    protected $appends = ['splash_img', 'path_img', 'element_img', 'icon_img'];
 
     protected $fillable = ['name', 'slug', 'element', 'path', 'faction', 'gender'];
 
@@ -116,7 +116,7 @@ class Character extends Model
 
     public function eidolons(): hasMany
     {
-        return $this->hasMany(Eidolon::class);
+        return $this->hasMany(Eidolon::class)->orderBy('eidolon_number');
     }
 
     public function abilities(): hasMany

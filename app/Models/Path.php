@@ -9,6 +9,8 @@ class Path extends Model
 {
     use HasFactory;
 
+    protected $appends = ['img'];
+
     public function getImgAttribute()
     {
         return asset(("images/paths/$this->name.webp"));
