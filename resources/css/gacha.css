@@ -541,15 +541,6 @@
     filter: blur(2px);
 }
 
-.pull-warp-status {
-    position: absolute;
-    left: 50%;
-    bottom: 10%;
-    width: min(24rem, 80%);
-    transform: translateX(-50%);
-    text-align: center;
-}
-
 .pull-warp-title {
     color: white;
     font-weight: 600;

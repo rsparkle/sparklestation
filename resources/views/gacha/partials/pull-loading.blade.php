@@ -18,17 +18,6 @@
             <div class="pull-warp-core"></div>
         </div>
 
-        <div class="pull-warp-status">
-            <p class="pull-warp-title">Initiating Warp</p>
-            <p class="pull-warp-subtitle" id="pullWarpStatus">
-                Establishing connection...
-            </p>
-
-            <div class="pull-warp-progress">
-                <div class="pull-warp-progress-bar"></div>
-            </div>
-        </div>
-
         <div class="pull-warp-flash"></div>
     </div>
 </div>

@@ -25,16 +25,6 @@ const PULL_LAND_PAUSE = 150;
 
 const pullLoadingOverlay = document.getElementById('pullLoadingOverlay');
 const pullWarpParticles = document.getElementById('pullWarpParticles');
-const pullWarpStatus = document.getElementById('pullWarpStatus');
-
-let pullStatusInterval = null;
-
-const pullLoadingMessages = [
-  'Establishing connection...',
-  'Calculating trajectory...',
-  'Traversing the stars...',
-  'Resolving signal...',
-];
 
 function setSelectionMode(type) {
   selectionMode = type;
@@ -423,25 +413,9 @@ function showPullLoading() {
   requestAnimationFrame(() => {
     pullLoadingOverlay.classList.add('visible');
   });
-
-  let messageIndex = 0;
-
-  pullWarpStatus.textContent =
-    pullLoadingMessages[messageIndex];
-
-  pullStatusInterval = setInterval(() => {
-    messageIndex =
-      (messageIndex + 1) % pullLoadingMessages.length;
-
-    pullWarpStatus.textContent =
-      pullLoadingMessages[messageIndex];
-  }, 1300);
 }
 
 function hidePullLoading(animate = true) {
-  clearInterval(pullStatusInterval);
-  pullStatusInterval = null;
-
   if (!animate) {
     pullLoadingOverlay.classList.remove(
       'visible',
