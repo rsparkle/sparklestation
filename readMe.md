@@ -1,7 +1,7 @@
 # SparkleStation  
 ### Personal HSR Data Hub
 
-**Status: Beta (v0.8)**
+**Status: 1.0**
 
 SparkleStation is a **Laravel-based web project** built as a personal hub for **HSR** data with a focus on data presentation, UI experimentation and small interactive systems.
 
